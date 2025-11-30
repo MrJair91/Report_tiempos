@@ -61,6 +61,15 @@ def reporte():
     registros = Registro.query.all()
     return render_template('reporte.html', registros=registros)
 
+@app.route('/eliminar/<int:registro_id>/<int:user_id>')
+def eliminar_registro(registro_id, user_id):
+    registro = Registro.query.get_or_404(registro_id)
+    db.session.delete(registro)
+    db.session.commit()
+    flash('Registro eliminado correctamente.')
+    return redirect(url_for('dashboard', user_id=user_id))
+
+
 @app.route('/exportar')
 def exportar():
     registros = Registro.query.all()
