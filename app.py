@@ -56,6 +56,17 @@ def registrar_tiempo():
         flash('✅ Registro guardado correctamente.')
     return redirect(url_for('dashboard', user_id=user_id))
 
+@app.route('/editar/<int:registro_id>/<int:user_id>', methods=['GET','POST'])
+def editar_registro(registro_id, user_id):
+    registro = Registro.query.get_or_404(registro_id)
+    if request.method == 'POST':
+        registro.proyecto = request.form['proyecto']
+        registro.porcentaje = int(request.form['porcentaje'])
+        db.session.commit()
+        flash('Registro actualizado correctamente.')
+        return redirect(url_for('dashboard', user_id=user_id))
+    return render_template('editar.html', registro=registro, user_id=user_id)
+
 @app.route('/reporte')
 def reporte():
     registros = Registro.query.all()
